@@ -7,6 +7,7 @@ const app = express();
 const cors = require('cors');
 // 将 cors 注册为全局中间件
 app.use(cors());
+
 // write your code here...
 
 // 调用 app.listen 方法，指定端口号并启动web服务器
