@@ -18,7 +18,20 @@ app.use('/auth', authRouter);
 
 // write your code here...
 
-// 调用 app.listen 方法，指定端口号并启动web服务器
-app.listen(3007, () => {
-  console.log('api server running at http://127.0.0.1:3007');
-});
+// 导入数据库初始化函数
+const { initializeDatabase } = require('./db/initialize');
+// 启动服务器前初始化数据库
+(async () => {
+  try {
+    // 初始化数据库
+    await initializeDatabase();
+    console.log('Database initialized successfully');
+
+    // 调用 app.listen 方法，指定端口号并启动web服务器
+    app.listen(3007, () => {
+      console.log('api server running at http://127.0.0.1:3007');
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+  }
+})();
