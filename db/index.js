@@ -11,6 +11,7 @@ const dbConfig = {
 const sequelize = new Sequelize({
   dialect: dbConfig.dsl,
   storage: dbConfig.dbfile,
+  logging: false, // 设置为 false 以禁用日志记录
 });
 
 // 导出 dbConfig 与 Sequelize 实例

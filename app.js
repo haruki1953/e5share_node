@@ -1,22 +1,45 @@
 // 导入 express 模块
 const express = require('express');
+// 数据验证
+const joi = require('joi');
+// 导入 cors 中间件
+const cors = require('cors');
+// 导入登陆注册路由模块
+const authRouter = require('./router/authRouter');
+
 // 创建 express 的服务器实例
 const app = express();
 
-// 导入 cors 中间件
-const cors = require('cors');
 // 将 cors 注册为全局中间件
 app.use(cors());
-
 // 解析 JSON 格式的请求体数据
 app.use(express.json());
-
-// 导入登陆注册路由模块
-const authRouter = require('./router/authRouter');
 // 注册登录路由模块
 app.use('/auth', authRouter);
 
-// write your code here...
+/** * 全局错误中间件** */
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  if (err instanceof joi.ValidationError) {
+    return res.status(400).json({
+      code: 1,
+      message: err.message,
+    });
+  }
+  // 身份认证失败的错误
+  // if (err.name === 'UnauthorizedError') {
+  //   return res.status(400).json({
+  //     code: 1,
+  //     message: '身份认证失败！',
+  //   });
+  // }
+
+  // 未知错误
+  return res.status(500).json({
+    code: 1,
+    message: err.message,
+  });
+});
 
 // 导入数据库初始化函数
 const { initializeDatabase } = require('./db/initialize');
