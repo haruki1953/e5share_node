@@ -20,10 +20,11 @@ app.use('/auth', authRouter);
 /** * 全局错误中间件** */
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
+  // 数据验证失败的错误
   if (err instanceof joi.ValidationError) {
     return res.status(400).json({
       code: 1,
-      message: err.message,
+      message: '请求参数格式错误',
     });
   }
   // 身份认证失败的错误
@@ -37,7 +38,7 @@ app.use((err, req, res, next) => {
   // 未知错误
   return res.status(500).json({
     code: 1,
-    message: err.message,
+    message: '发生未知错误，请联系管理员 X/twitter: @haruki19530615',
   });
 });
 

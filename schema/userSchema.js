@@ -27,3 +27,21 @@ exports.regUserSchema = {
     email,
   },
 };
+
+// 用户名登录表单的验证规则对象
+exports.loginByUsernameSchema = {
+  // 表示需要对 req.body 中的数据进行验证
+  body: {
+    username,
+    password,
+  },
+};
+
+// 邮箱登录表单的验证规则对象
+exports.loginByEmailSchema = {
+  // 表示需要对 req.body 中的数据进行验证
+  body: {
+    email,
+    password,
+  },
+};

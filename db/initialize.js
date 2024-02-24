@@ -1,3 +1,5 @@
+// 密码加密
+const bcrypt = require('bcryptjs');
 const { sequelize } = require('./index');
 const { User } = require('../models/index');
 
@@ -13,7 +15,7 @@ const initializeDatabase = async () => {
       // 执行初始化内容，例如创建初始用户
       await User.create({
         username: 'admin',
-        password_hash: 'hashed_password',
+        password_hash: bcrypt.hashSync('adminadmin', 10),
         email: 'admin@example.com',
       });
       console.log('Initial user created successfully');
