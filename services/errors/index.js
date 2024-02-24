@@ -13,7 +13,7 @@ const errorHandler = (error, errorString) => {
     message = `${errorString}: ${error.message}`;
   } else {
     status = 500; // Default to Internal Server Error for unknown errors
-    message = errorString;
+    message = `${errorString}: 发生未知错误`;
   }
 
   return { message, status };

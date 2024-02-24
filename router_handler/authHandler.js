@@ -1,5 +1,5 @@
 // 导入业务逻辑操作
-const userService = require('../services/userService');
+const authService = require('../services/authService');
 // 导入错误处理函数
 const { errorHandler } = require('../services/errors/index');
 
@@ -12,7 +12,7 @@ exports.register = async (req, res) => {
     } = req.body;
 
     // 在数据库中创建新用户
-    await userService.registerUser(username, password, email);
+    await authService.registerUser(username, password, email);
 
     // 返回成功的响应
     res.status(201).json({
@@ -38,7 +38,7 @@ exports.loginByUsername = async (req, res) => {
     } = req.body;
 
     // 登录操作
-    const token = await userService.loginByUsername(username, password);
+    const token = await authService.loginByUsername(username, password);
 
     // 返回成功的响应
     res.status(201).json({
@@ -65,7 +65,7 @@ exports.loginByEmail = async (req, res) => {
     } = req.body;
 
     // 登录操作
-    const token = await userService.loginByEmail(email, password);
+    const token = await authService.loginByEmail(email, password);
 
     // 返回成功的响应
     res.status(201).json({

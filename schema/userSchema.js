@@ -18,6 +18,18 @@ const password = joi.string().regex(/^[a-zA-Z0-9_]{6,32}$/).required();
 // 邮箱的验证规则
 const email = joi.string().email().required();
 
+// 昵称的校验规则：必填，最大长度32
+const nickname = joi.string().max(32).allow('').required()
+  .label('Nickname');
+
+// 联系信息的校验规则：必填，最大长度500
+const contactInfo = joi.string().max(500).allow('').required()
+  .label('ContactInfo');
+
+// 简介的校验规则：必填，最大长度500
+const bio = joi.string().max(500).allow('').required()
+  .label('Bio');
+
 // 注册表单的验证规则对象
 exports.regUserSchema = {
   // 表示需要对 req.body 中的数据进行验证
@@ -43,5 +55,15 @@ exports.loginByEmailSchema = {
   body: {
     email,
     password,
+  },
+};
+
+// 修改基本信息表单的验证规则对象
+exports.updateProfileSchema = {
+  // 表示需要对 req.body 中的数据进行验证
+  body: {
+    nickname,
+    contactInfo,
+    bio,
   },
 };

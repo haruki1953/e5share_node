@@ -4,8 +4,16 @@ const express = require('express');
 const joi = require('joi');
 // 导入 cors 中间件
 const cors = require('cors');
+// 解析 token 的中间件
+const expressJWT = require('express-jwt');
+
+// 导入jwt配置文件
+const { jwtConfig } = require('./config');
+
 // 导入登陆注册路由模块
 const authRouter = require('./router/authRouter');
+// 导入用户路由模块
+const userRouter = require('./router/userRouter');
 
 // 创建 express 的服务器实例
 const app = express();
@@ -14,8 +22,13 @@ const app = express();
 app.use(cors());
 // 解析 JSON 格式的请求体数据
 app.use(express.json());
+// 设置 expressJWT 中间件，除了 /auth /public 开头的路径需要 token 认证
+app.use(expressJWT({ secret: jwtConfig.secretKey }).unless({ path: [/^\/auth\//, /^\/public\//] }));
+
 // 注册登录路由模块
 app.use('/auth', authRouter);
+// 用户路由模块
+app.use('/user', userRouter);
 
 /** * 全局错误中间件** */
 // eslint-disable-next-line no-unused-vars
@@ -28,12 +41,12 @@ app.use((err, req, res, next) => {
     });
   }
   // 身份认证失败的错误
-  // if (err.name === 'UnauthorizedError') {
-  //   return res.status(400).json({
-  //     code: 1,
-  //     message: '身份认证失败！',
-  //   });
-  // }
+  if (err.name === 'UnauthorizedError') {
+    return res.status(400).json({
+      code: 1,
+      message: '身份认证失败！',
+    });
+  }
 
   // 未知错误
   return res.status(500).json({
