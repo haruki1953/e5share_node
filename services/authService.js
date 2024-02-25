@@ -151,4 +151,6 @@ module.exports = {
   registerUser,
   loginByUsername,
   loginByEmail,
+  confirmEmailNotExists,
+  confirmUserPassword,
 };

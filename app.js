@@ -8,7 +8,7 @@ const cors = require('cors');
 const expressJWT = require('express-jwt');
 
 // 导入jwt配置文件
-const { jwtConfig } = require('./config');
+const { jwtConfig, avatarConfig } = require('./config');
 
 // 导入登陆注册路由模块
 const authRouter = require('./router/authRouter');
@@ -23,7 +23,10 @@ app.use(cors());
 // 解析 JSON 格式的请求体数据
 app.use(express.json());
 // 设置 expressJWT 中间件，除了 /auth /public 开头的路径需要 token 认证
-app.use(expressJWT({ secret: jwtConfig.secretKey }).unless({ path: [/^\/auth\//, /^\/public\//] }));
+app.use(expressJWT({ secret: jwtConfig.secretKey }).unless({ path: [/^\/auth\//, /^\/public\//, /^\/static\//] }));
+
+// 托管静态资源文件 记得排除鉴权
+app.use('/static/avatar', express.static(avatarConfig.savePath));
 
 // 注册登录路由模块
 app.use('/auth', authRouter);
@@ -59,16 +62,11 @@ app.use((err, req, res, next) => {
 const { initializeDatabase } = require('./db/initialize');
 // 启动服务器前初始化数据库
 (async () => {
-  try {
-    // 初始化数据库
-    await initializeDatabase();
-    console.log('Database initialized successfully');
+  // 初始化数据库
+  await initializeDatabase();
 
-    // 调用 app.listen 方法，指定端口号并启动web服务器
-    app.listen(3007, () => {
-      console.log('api server running at http://127.0.0.1:3007');
-    });
-  } catch (error) {
-    console.error('Failed to start server:', error);
-  }
+  // 调用 app.listen 方法，指定端口号并启动web服务器
+  app.listen(3007, () => {
+    console.log('api server running at http://127.0.0.1:3007');
+  });
 })();

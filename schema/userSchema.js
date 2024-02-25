@@ -16,7 +16,7 @@ const username = joi.string().regex(/^[a-zA-Z0-9_]{1,32}$/).required();
 const password = joi.string().regex(/^[a-zA-Z0-9_]{6,32}$/).required();
 
 // 邮箱的验证规则
-const email = joi.string().email().required();
+const email = joi.string().max(100).email().required();
 
 // 昵称的校验规则：必填，最大长度32
 const nickname = joi.string().max(32).allow('').required()
@@ -29,6 +29,9 @@ const contactInfo = joi.string().max(500).allow('').required()
 // 简介的校验规则：必填，最大长度500
 const bio = joi.string().max(500).allow('').required()
   .label('Bio');
+
+// 日期字符串的校验规则
+const date = joi.string().regex(/^\d{4}-\d{2}-\d{2}$/).required();
 
 // 注册表单的验证规则对象
 exports.regUserSchema = {
@@ -65,5 +68,31 @@ exports.updateProfileSchema = {
     nickname,
     contactInfo,
     bio,
+  },
+};
+
+// 修改邮箱的验证规则对象
+exports.updateEmailSchema = {
+  // 表示需要对 req.body 中的数据进行验证
+  body: {
+    email,
+  },
+};
+
+// 修改密码的验证规则对象
+exports.updatePasswordSchema = {
+  // 表示需要对 req.body 中的数据进行验证
+  body: {
+    oldPassword: password,
+    newPassword: password,
+  },
+};
+
+// 修改e5订阅信息的验证规则对象
+exports.updateE5infoSchema = {
+  // 表示需要对 req.body 中的数据进行验证
+  body: {
+    subscriptionDate: date,
+    expirationDate: date,
   },
 };
