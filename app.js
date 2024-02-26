@@ -14,6 +14,8 @@ const { jwtConfig, avatarConfig } = require('./config');
 const authRouter = require('./router/authRouter');
 // 导入用户路由模块
 const userRouter = require('./router/userRouter');
+// 导入公共接口路由模块
+const publicRouter = require('./router/publicRouter');
 
 // 创建 express 的服务器实例
 const app = express();
@@ -32,6 +34,8 @@ app.use('/static/avatar', express.static(avatarConfig.savePath));
 app.use('/auth', authRouter);
 // 用户路由模块
 app.use('/user', userRouter);
+// 用户路由模块
+app.use('/public', publicRouter);
 
 /** * 全局错误中间件** */
 // eslint-disable-next-line no-unused-vars
