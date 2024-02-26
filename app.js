@@ -16,6 +16,8 @@ const authRouter = require('./router/authRouter');
 const userRouter = require('./router/userRouter');
 // 导入公共接口路由模块
 const publicRouter = require('./router/publicRouter');
+// 导入e5动态路由模块
+const postRouter = require('./router/postRouter');
 
 // 创建 express 的服务器实例
 const app = express();
@@ -34,8 +36,10 @@ app.use('/static/avatar', express.static(avatarConfig.savePath));
 app.use('/auth', authRouter);
 // 用户路由模块
 app.use('/user', userRouter);
-// 用户路由模块
+// 公共接口路由模块
 app.use('/public', publicRouter);
+// e5动态路由模块
+app.use('/e5', postRouter);
 
 /** * 全局错误中间件** */
 // eslint-disable-next-line no-unused-vars

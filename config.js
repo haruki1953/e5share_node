@@ -20,3 +20,10 @@ exports.avatarConfig = {
   size: 256, // 图片大小
   quality: 64, // 图片质量
 };
+
+// 用户状态配置
+exports.accountStatusConfig = {
+  active: 'active',
+  banned: 'banned',
+  sharing: 'sharing',
+};

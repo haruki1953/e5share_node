@@ -244,10 +244,13 @@ async function updateE5info(id, subscriptionDate, expirationDate) {
 }
 
 module.exports = {
+  // 接口对应的业务操作
   getProfile,
   updateProfile,
   updateAvatar,
   updateEmail,
   updatePassword,
   updateE5info,
+  // 以下为在其他业务操作中使用的方法
+  findOneUserById,
 };

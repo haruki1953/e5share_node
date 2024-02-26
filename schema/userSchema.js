@@ -6,7 +6,7 @@ const joi = require('joi');
 * min(length) 最小长度
 * max(length) 最大长度
 * required() 值是必填项，不能为 undefined
-* pattern(正则表达式) 值必须符合正则表达式的规则
+* pattern、regex(正则表达式) 值必须符合正则表达式的规则
 */
 
 // 用户名的验证规则 必填 长度1到32 只能包含字母数字下划线
