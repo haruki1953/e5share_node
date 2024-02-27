@@ -19,8 +19,8 @@ const router = express.Router();
 // 注册新用户
 router.post('/register', expressJoi(regUserSchema), authHandler.register);
 // 用户名登录与邮箱登录
-router.post('/loginByUsername', expressJoi(loginByUsernameSchema), authHandler.loginByUsername);
-router.post('/loginByEmail', expressJoi(loginByEmailSchema), authHandler.loginByEmail);
+router.post('/login/username', expressJoi(loginByUsernameSchema), authHandler.loginByUsername);
+router.post('/login/email', expressJoi(loginByEmailSchema), authHandler.loginByEmail);
 
 // 将路由对象共享出去
 module.exports = router;

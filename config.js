@@ -22,8 +22,15 @@ exports.avatarConfig = {
 };
 
 // 用户状态配置
-exports.accountStatusConfig = {
+const status = {
   active: 'active',
   banned: 'banned',
   sharing: 'sharing',
+};
+exports.accountStatusConfig = status;
+
+// e5分享相关配置
+exports.e5shareConfig = {
+  // 允许用户登记的状态 数组
+  allowRegistrationStatus: [status.active],
 };

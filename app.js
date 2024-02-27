@@ -18,6 +18,8 @@ const userRouter = require('./router/userRouter');
 const publicRouter = require('./router/publicRouter');
 // 导入e5动态路由模块
 const postRouter = require('./router/postRouter');
+// 导入e5分享路由模块
+const shareRouter = require('./router/shareRouter');
 
 // 创建 express 的服务器实例
 const app = express();
@@ -39,7 +41,9 @@ app.use('/user', userRouter);
 // 公共接口路由模块
 app.use('/public', publicRouter);
 // e5动态路由模块
-app.use('/e5', postRouter);
+app.use('/e5post', postRouter);
+// e5分享路由模块
+app.use('/e5share', shareRouter);
 
 /** * 全局错误中间件** */
 // eslint-disable-next-line no-unused-vars

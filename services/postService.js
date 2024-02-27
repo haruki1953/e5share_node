@@ -154,8 +154,11 @@ async function clearPosts(id) {
 }
 
 module.exports = {
+  // 接口对应的业务操作
   getPosts,
   sendPost,
   deletePost,
   clearPosts,
+  // 以下为在其他业务操作中使用的方法
+  findE5PostById,
 };
