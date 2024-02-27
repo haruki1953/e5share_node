@@ -41,7 +41,7 @@ exports.loginByUsername = async (req, res) => {
     const token = await authService.loginByUsername(username, password);
 
     // 返回成功的响应
-    res.status(201).json({
+    res.status(200).json({
       code: 0,
       message: '登录成功',
       token,
@@ -68,7 +68,7 @@ exports.loginByEmail = async (req, res) => {
     const token = await authService.loginByEmail(email, password);
 
     // 返回成功的响应
-    res.status(201).json({
+    res.status(200).json({
       code: 0,
       message: '登录成功',
       token,

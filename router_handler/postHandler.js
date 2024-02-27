@@ -14,7 +14,7 @@ exports.getPosts = async (req, res) => {
     const data = await postService.getPosts(id, e5id);
 
     // 返回成功的响应
-    res.status(201).json({
+    res.status(200).json({
       code: 0,
       message: '获取成功',
       data,
@@ -36,7 +36,7 @@ exports.sendPost = async (req, res) => {
     const { id } = req.user; // 用户id
     const { e5id, content } = req.body; // e5账号主的id 与内容
 
-    // 获取动态
+    // 发送帖子
     await postService.sendPost(id, e5id, content);
 
     // 返回成功的响应
@@ -61,17 +61,41 @@ exports.deletePost = async (req, res) => {
     const { id } = req.user; // 用户id
     const { e5id, uuid } = req.query; // e5账号主的id 与 帖子id（uuid）
 
-    // 获取动态
+    // 删除帖子
     await postService.deletePost(id, e5id, uuid);
 
     // 返回成功的响应
-    res.status(201).json({
+    res.status(204).json({
       code: 0,
       message: '删除成功',
     });
   } catch (error) {
     // 如果发生错误，获取错误信息，并根据情况响应错误信息
     const errorInfo = errorHandler(error, '删除失败');
+    res.status(errorInfo.status).json({
+      code: 1,
+      message: errorInfo.message,
+    });
+  }
+};
+
+// 删除动态的处理函数
+exports.clearPosts = async (req, res) => {
+  try {
+    // 从请求中获取用户信息
+    const { id } = req.user; // 用户id
+
+    // 清空动态
+    await postService.clearPosts(id);
+
+    // 返回成功的响应
+    res.status(204).json({
+      code: 0,
+      message: '清空动态成功',
+    });
+  } catch (error) {
+    // 如果发生错误，获取错误信息，并根据情况响应错误信息
+    const errorInfo = errorHandler(error, '清空动态失败');
     res.status(errorInfo.status).json({
       code: 1,
       message: errorInfo.message,

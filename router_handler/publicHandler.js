@@ -10,7 +10,7 @@ exports.getUsers = async (req, res) => {
     const data = await publicService.getUsers();
 
     // 返回成功的响应
-    res.status(201).json({
+    res.status(200).json({
       code: 0,
       message: '获取成功',
       data,

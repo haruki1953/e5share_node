@@ -13,7 +13,7 @@ exports.getProfile = async (req, res) => {
     const data = await userService.getProfile(id);
 
     // 返回成功的响应
-    res.status(201).json({
+    res.status(200).json({
       code: 0,
       message: '个人信息获取成功',
       data,
@@ -39,7 +39,7 @@ exports.updateProfile = async (req, res) => {
     await userService.updateProfile(id, nickname, contactInfo, bio);
 
     // 返回成功的响应
-    res.status(201).json({
+    res.status(204).json({
       code: 0,
       message: '修改成功',
     });
@@ -68,7 +68,7 @@ exports.updateAvatar = async (req, res) => {
     await userService.updateAvatar(id, filename);
 
     // 返回成功的响应
-    res.status(201).json({
+    res.status(204).json({
       code: 0,
       message: '修改成功',
     });
@@ -93,7 +93,7 @@ exports.updateEmail = async (req, res) => {
     await userService.updateEmail(id, email);
 
     // 返回成功的响应
-    res.status(201).json({
+    res.status(204).json({
       code: 0,
       message: '修改成功',
     });
@@ -118,7 +118,7 @@ exports.updatePassword = async (req, res) => {
     await userService.updatePassword(id, oldPassword, newPassword);
 
     // 返回成功的响应
-    res.status(201).json({
+    res.status(204).json({
       code: 0,
       message: '修改成功',
     });
@@ -143,7 +143,7 @@ exports.updateE5info = async (req, res) => {
     await userService.updateE5info(id, subscriptionDate, expirationDate);
 
     // 返回成功的响应
-    res.status(201).json({
+    res.status(204).json({
       code: 0,
       message: '修改成功',
     });

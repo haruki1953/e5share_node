@@ -22,6 +22,8 @@ router.get('/posts/:e5id', expressJoi(getPostsSchema), postHandler.getPosts);
 router.post('/post', expressJoi(sendPostSchema), postHandler.sendPost);
 // 删除帖子
 router.delete('/post', expressJoi(deletePostSchema), postHandler.deletePost);
+// 清空动态
+router.delete('/posts', postHandler.clearPosts);
 
 // 将路由对象共享出去
 module.exports = router;

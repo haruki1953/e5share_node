@@ -44,7 +44,7 @@ async function getPosts(id, e5id) {
   return e5Post.posts;
 }
 
-// 发送e5动态
+// 发送e5动态帖子
 async function sendPost(id, e5id, content) {
   // 获取e5账号主信息
   const e5user = await findOneUserById(e5id);
@@ -81,11 +81,11 @@ async function sendPost(id, e5id, content) {
     return e5Post.posts;
   } catch (error) {
     // 如果发生错误，抛出客户端错误
-    throw new ServerError('发送动态失败');
+    throw new ServerError('发送帖子失败');
   }
 }
 
-// 删除e5动态
+// 删除e5动态帖子
 async function deletePost(id, e5id, uuid) {
   // 获取e5账号主信息
   const e5user = await findOneUserById(e5id);
@@ -112,7 +112,7 @@ async function deletePost(id, e5id, uuid) {
   }
   // 判断当前用户是否与帖子的user_id对应，或为e5帐号主
   if (posts[index].userId !== id && id !== e5user.id) {
-    throw new ClientError('无权删除该动态');
+    throw new ClientError('无权删除该帖子');
   }
   // 删除
   posts.splice(index, 1);
@@ -125,7 +125,31 @@ async function deletePost(id, e5id, uuid) {
     return e5Post.posts;
   } catch (error) {
     // 如果发生错误，抛出客户端错误
-    throw new ServerError('删除动态失败');
+    throw new ServerError('删除帖子失败');
+  }
+}
+
+// 清空e5动态
+async function clearPosts(id) {
+  // 获取e5账号主信息（自己）
+  const e5user = await findOneUserById(id);
+
+  // 确认访问动态权限
+  confirmPostAccessPermission(id, e5user);
+
+  // 通过id获取UserE5Post
+  const e5Post = await findE5PostById(id);
+
+  // 清空
+  e5Post.posts = '[]';
+  try {
+    // 更新数据
+    await e5Post.save();
+    // 返回更新后的数据
+    return e5Post.posts;
+  } catch (error) {
+    // 如果发生错误，抛出客户端错误
+    throw new ServerError('清空动态失败');
   }
 }
 
@@ -133,4 +157,5 @@ module.exports = {
   getPosts,
   sendPost,
   deletePost,
+  clearPosts,
 };
