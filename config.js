@@ -34,3 +34,23 @@ exports.e5shareConfig = {
   // 允许用户登记的状态 数组
   allowRegistrationStatus: [status.active],
 };
+
+// 通知类型
+exports.notificationType = {
+  // 系统通知
+  system: 'system',
+  // 其他通知
+  other: 'other',
+  // e5分享申请通知
+  e5_share_application: 'e5_share_application',
+  // e5分享确认通知
+  e5_share_confirmation: 'e5_share_confirmation',
+  // e5分享完成通知
+  e5_share_completion: 'e5_share_completion',
+  // e5分享注销通知
+  e5_share_closure: 'e5_share_closure',
+  // e5账号分享者停止分享通知
+  e5_share_sharer_stop: 'e5_share_sharer_stop',
+  // e5账号接受者停止分享通知
+  e5_share_receiver_stop: 'e5_share_receiver_stop',
+};

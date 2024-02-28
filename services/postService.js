@@ -1,5 +1,4 @@
 // 用于生成帖子的uuid
-// eslint-disable-next-line import/no-extraneous-dependencies
 const { v4: uuidv4 } = require('uuid');
 
 // 用于操作数据库的模型

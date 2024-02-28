@@ -9,6 +9,7 @@ const shareHandler = require('../router_handler/shareHandler');
 // 导入需要的验证规则对象
 const {
   registerShareSchema,
+  cancelShareSchema,
 } = require('../schema/shareSchema');
 
 // 创建路由对象
@@ -16,8 +17,8 @@ const router = express.Router();
 
 // 登记分享
 router.put('/register', expressJoi(registerShareSchema), shareHandler.registerShare);
-// // 注销分享
-// router.put('/cancel', shareHandler.cancelShare);
+// 注销分享
+router.put('/cancel', expressJoi(cancelShareSchema), shareHandler.cancelShare);
 
 // // 申请
 // router.post('/application', shareHandler.sendApplication);
