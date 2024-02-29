@@ -2,19 +2,21 @@
 const bcrypt = require('bcryptjs');
 // 生成 Token 字符串
 const jwt = require('jsonwebtoken');
-
 // Sequelize 实例
 const { sequelize } = require('../db/index');
 // 用于操作数据库的模型
 const {
   User, UserE5Post, UserNotification, UsersE5SharedInfo,
 } = require('../models/index');
-
 // 自定义错误对象
 const { ClientError, ServerError } = require('./errors/index');
-
 // jwt配置文件
 const { jwtConfig } = require('../config');
+// 数据模块
+const {
+  findOneUserByUsername,
+  findOneUserByEmail,
+} = require('./dataService');
 
 // 确认用户名不存在
 async function confirmUsernameNotExists(username) {
@@ -81,26 +83,6 @@ async function registerUser(username, password, email) {
 
     throw new ServerError('创建用户失败');
   }
-}
-
-// 根据用户名查找用户
-async function findOneUserByUsername(username) {
-  const user = await User.findOne({ where: { username } });
-  // 没有则抛出错误
-  if (!user) {
-    throw new ClientError('用户不存在');
-  }
-  return user;
-}
-
-// 根据邮箱查找用户
-async function findOneUserByEmail(email) {
-  const user = await User.findOne({ where: { email } });
-  // 没有则抛出错误
-  if (!user) {
-    throw new ClientError('用户不存在');
-  }
-  return user;
 }
 
 // 确认用户的密码正确

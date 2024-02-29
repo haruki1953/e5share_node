@@ -10,21 +10,17 @@ const moment = require('moment');
 // 导入配置文件
 const { avatarConfig } = require('../config');
 // 用于操作数据库的模型
-const { User, UserNotification } = require('../models/index');
+const { User } = require('../models/index');
 // 自定义错误对象
 const { ClientError, ServerError } = require('./errors/index');
 // 已定义的业务操作
 const { confirmEmailNotExists, confirmUserPassword } = require('./authService');
 
-// 根据id查找用户
-async function findOneUserById(id) {
-  const user = await User.findByPk(id);
-  // 没有则抛出错误
-  if (!user) {
-    throw new ClientError('用户不存在');
-  }
-  return user;
-}
+// 数据模块
+const {
+  findOneUserById,
+  findNotificationById,
+} = require('./dataService');
 
 // 修改最后登录时间
 async function updateLastLoginTime(id) {
@@ -36,24 +32,13 @@ async function updateLastLoginTime(id) {
   }
 }
 
-// 获取用户通知
-async function getUserNotifications(userId) {
-  const userNotification = await UserNotification.findOne({ where: { user_id: userId } });
-  if (!userNotification) {
-    throw new ClientError('获取用户通知失败');
-  }
-  // return JSON.parse(userNotification.notifications);
-  // 直接返回字符串，在前端解析通知，减小后端压力（
-  return userNotification.notifications;
-}
-
 // 获取个人信息
 async function getProfile(id) {
   // 根据id查找用户
   const user = await findOneUserById(id);
 
-  // 获取用户通知
-  const notifications = await getUserNotifications(id);
+  // 获取用户通知，直接返回字符串，在前端解析通知，减小后端压力（
+  const userNotification = await findNotificationById(id);
 
   // 修改最后登录时间，在查询后再修改，这样前端可以获取到上次登录的时间
   await updateLastLoginTime(id);
@@ -76,7 +61,7 @@ async function getProfile(id) {
     helped_users: user.helped_users,
     helping_by_users: user.helping_by_users,
     helped_by_users: user.helped_by_users,
-    notifications,
+    notifications: userNotification.notifications,
   };
 
   return data;
@@ -251,6 +236,4 @@ module.exports = {
   updateEmail,
   updatePassword,
   updateE5info,
-  // 以下为在其他业务操作中使用的方法
-  findOneUserById,
 };

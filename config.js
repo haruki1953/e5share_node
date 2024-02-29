@@ -22,17 +22,29 @@ exports.avatarConfig = {
 };
 
 // 用户状态配置
-const status = {
+const accountStatus = {
   active: 'active',
   banned: 'banned',
   sharing: 'sharing',
 };
-exports.accountStatusConfig = status;
+exports.accountStatus = accountStatus;
+
+// 分享信息状态
+const shareInfoStatus = {
+  unsent: 'unsent',
+  pending_confirmation: 'pending_confirmation',
+  confirmed: 'confirmed',
+  stoped: 'stoped',
+};
 
 // e5分享相关配置
 exports.e5shareConfig = {
   // 允许用户登记的状态 数组
-  allowRegistrationStatus: [status.active],
+  allowRegistrationStatus: [accountStatus.active],
+  // 分享信息状态
+  shareInfoStatus,
+  // 分享信息不能删除的状态：已确认后不能删除
+  shareInfoCantDelStatus: [shareInfoStatus.confirmed],
 };
 
 // 通知类型

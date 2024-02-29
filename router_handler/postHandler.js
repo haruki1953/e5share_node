@@ -4,14 +4,14 @@ const postService = require('../services/postService');
 const { errorHandler } = require('../services/errors/index');
 
 // 获取动态的处理函数
-exports.getPosts = async (req, res) => {
+exports.getE5Posts = async (req, res) => {
   try {
     // 从请求中获取用户信息
     const { id } = req.user; // 用户id
     const { e5id } = req.params; // e5账号主的id
 
     // 获取动态
-    const data = await postService.getPosts(id, e5id);
+    const data = await postService.getE5Posts(id, e5id);
 
     // 返回成功的响应
     res.status(200).json({
@@ -30,14 +30,14 @@ exports.getPosts = async (req, res) => {
 };
 
 // 发送动态的处理函数
-exports.sendPost = async (req, res) => {
+exports.sendE5Post = async (req, res) => {
   try {
     // 从请求中获取用户信息
     const { id } = req.user; // 用户id
     const { e5id, content } = req.body; // e5账号主的id 与内容
 
     // 发送帖子
-    await postService.sendPost(id, e5id, content);
+    await postService.sendE5Post(id, e5id, content);
 
     // 返回成功的响应
     res.status(201).json({
@@ -55,14 +55,14 @@ exports.sendPost = async (req, res) => {
 };
 
 // 删除动态的处理函数
-exports.deletePost = async (req, res) => {
+exports.deleteE5Post = async (req, res) => {
   try {
     // 从请求中获取用户信息
     const { id } = req.user; // 用户id
     const { e5id, uuid } = req.query; // e5账号主的id 与 帖子id（uuid）
 
     // 删除帖子
-    await postService.deletePost(id, e5id, uuid);
+    await postService.deleteE5Post(id, e5id, uuid);
 
     // 返回成功的响应
     res.status(204).json({
@@ -80,13 +80,13 @@ exports.deletePost = async (req, res) => {
 };
 
 // 删除动态的处理函数
-exports.clearPosts = async (req, res) => {
+exports.clearE5Posts = async (req, res) => {
   try {
     // 从请求中获取用户信息
     const { id } = req.user; // 用户id
 
     // 清空动态
-    await postService.clearPosts(id);
+    await postService.clearE5Posts(id);
 
     // 返回成功的响应
     res.status(204).json({
