@@ -1,22 +1,21 @@
 // 用于生成uuid
 const { v4: uuidv4 } = require('uuid');
-
-// Sequelize 实例
-const { sequelize } = require('../db/index');
 // 自定义错误对象
 const { ClientError, ServerError } = require('./errors/index');
 // 数据模块
 const {
   findOneUserById,
-  findE5PostById,
-  findE5SharedInfoById,
   getHelpingByUsers,
   saveHelpingByUsers,
   getHelpingUsers,
-  // saveHelpingUsers,
+  saveHelpingUsers,
   getShareInfo,
   saveShareInfo,
-  saveHelpingUsers,
+  savePosts,
+  getHelpedByUsers,
+  saveHelpedByUsers,
+  getHelpedUsers,
+  saveHelpedUsers,
 } = require('./dataService');
 // 已定义的业务操作
 const { updateE5info } = require('./userService');
@@ -53,33 +52,18 @@ async function modifyStatusAndResetE5Info(id, status) {
   const user = await findOneUserById(id);
   // 设置用户状态
   user.account_status = status;
-  // helping_users 字段清空
-  user.helping_users = '[]';
-
-  // 获取动态，清空
-  const e5Post = await findE5PostById(id);
-  e5Post.posts = '[]';
-  // 获取分享信息，清空
-  const sharedInfo = await findE5SharedInfoById(id);
-  sharedInfo.shared_info = '[]';
-
-  // 使用事务保存信息
-  let transaction;
   try {
-    // 开启事务
-    transaction = await sequelize.transaction();
-
-    await user.save({ transaction });
-    await e5Post.save({ transaction });
-    await sharedInfo.save({ transaction });
-
-    // 提交事务
-    await transaction.commit();
+    await user.save();
   } catch (error) {
-    // 出错则回滚事务
-    if (transaction) await transaction.rollback();
     throw new ServerError('保存失败');
   }
+
+  // helping_users 字段清空
+  await saveHelpingUsers(id, []);
+  // 动态清空
+  await savePosts(id, []);
+  // 获取分享信息，清空
+  await saveShareInfo(id, []);
 }
 
 // 登记分享
@@ -299,14 +283,23 @@ async function acceptConfirmation(id, e5id, message) {
   // 获取e5账号主的 helping_users，并添加用户id
   const e5OwnerHelpingUsers = await getHelpingUsers(e5id);
   e5OwnerHelpingUsers.push(id);
+  // 获取e5账号主的 helped_users，并添加用户id
+  const e5OwnerHelpedUsers = await getHelpedUsers(e5id);
+  e5OwnerHelpedUsers.push(id);
+
   // 获取用户的 helping_by_users，并添加e5id
   const userHelpingByUsers = await getHelpingByUsers(id);
   userHelpingByUsers.push(e5id);
+  // 获取用户的 helped_by_users，并添加e5id
+  const userHelpedByUsers = await getHelpedByUsers(id);
+  userHelpedByUsers.push(e5id);
 
   // 统一保存信息
   await saveShareInfo(e5id, sharedInfo);
   await saveHelpingUsers(e5id, e5OwnerHelpingUsers);
+  await saveHelpedUsers(e5id, e5OwnerHelpedUsers);
   await saveHelpingByUsers(id, userHelpingByUsers);
+  await saveHelpedByUsers(id, userHelpedByUsers);
 
   // 给e5账号主发送 e5分享完成通知，并返回
   const newNotif = await sendE5ShareCompletionNotification(e5id, message, id);

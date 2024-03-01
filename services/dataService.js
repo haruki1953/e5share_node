@@ -97,7 +97,7 @@ async function getPosts(e5id) {
 // 保存动态操作
 async function savePosts(e5id, posts) {
   try {
-    // 直接更新数据，不需要重新查找用户通知
+    // 直接更新数据，不需要重新查找
     await UserE5Post.update(
       { posts: JSON.stringify(posts) },
       { where: { user_id: e5id } },
@@ -123,7 +123,7 @@ async function getNotifications(userId) {
 // 保存用户通知操作
 async function saveNotifications(userId, notifications) {
   try {
-    // 直接更新数据，不需要重新查找用户通知
+    // 直接更新数据，不需要重新查找
     await UserNotification.update(
       { notifications: JSON.stringify(notifications) },
       { where: { user_id: userId } },
@@ -151,9 +151,11 @@ async function getHelpingByUsers(userId) {
 // 保存 helping_by_users
 async function saveHelpingByUsers(userId, helpingByUsers) {
   try {
-    // 直接更新数据，不需要重新查找用户通知
+    // 使用 Set 和展开运算符去重数组
+    const uniqueArray = [...new Set(helpingByUsers)];
+    // 直接更新数据，不需要重新查找
     await User.update(
-      { helping_by_users: JSON.stringify(helpingByUsers) },
+      { helping_by_users: JSON.stringify(uniqueArray) },
       { where: { id: userId } },
     );
   } catch (error) {
@@ -179,9 +181,11 @@ async function getHelpingUsers(userId) {
 // 保存 helping_users
 async function saveHelpingUsers(userId, helpingUsers) {
   try {
-    // 直接更新数据，不需要重新查找用户通知
+    // 使用 Set 和展开运算符去重数组
+    const uniqueArray = [...new Set(helpingUsers)];
+    // 直接更新数据，不需要重新查找
     await User.update(
-      { helping_users: JSON.stringify(helpingUsers) },
+      { helping_users: JSON.stringify(uniqueArray) },
       { where: { id: userId } },
     );
   } catch (error) {
@@ -207,7 +211,7 @@ async function getShareInfo(userId) {
 // 保存 shared_info
 async function saveShareInfo(userId, sharedInfo) {
   try {
-    // 直接更新数据，不需要重新查找用户通知
+    // 直接更新数据，不需要重新查找
     await UsersE5SharedInfo.update(
       { shared_info: JSON.stringify(sharedInfo) },
       { where: { user_id: userId } },
@@ -215,6 +219,66 @@ async function saveShareInfo(userId, sharedInfo) {
   } catch (error) {
     // 如果发生错误，抛出客户端错误
     throw new ServerError('保存 shared_info 失败');
+  }
+}
+
+// 获取 helped_by_users
+async function getHelpedByUsers(userId) {
+  const user = await findOneUserById(userId);
+  let helpedByUsers;
+  try {
+    // 从字符串解析为帖子对象数组
+    helpedByUsers = JSON.parse(user.helped_by_users);
+  } catch (error) {
+    // 如果发生错误，抛出客户端错误
+    throw new ServerError('helped_by_users 列表损坏');
+  }
+  return helpedByUsers;
+}
+
+// 保存 helped_by_users
+async function saveHelpedByUsers(userId, helpedByUsers) {
+  try {
+    // 使用 Set 和展开运算符去重数组
+    const uniqueArray = [...new Set(helpedByUsers)];
+    // 直接更新数据，不需要重新查找
+    await User.update(
+      { helped_by_users: JSON.stringify(uniqueArray) },
+      { where: { id: userId } },
+    );
+  } catch (error) {
+    // 如果发生错误，抛出客户端错误
+    throw new ServerError('保存 helped_by_users 失败');
+  }
+}
+
+// 获取 helped_users
+async function getHelpedUsers(userId) {
+  const user = await findOneUserById(userId);
+  let helpedUsers;
+  try {
+    // 从字符串解析为帖子对象数组
+    helpedUsers = JSON.parse(user.helped_users);
+  } catch (error) {
+    // 如果发生错误，抛出客户端错误
+    throw new ServerError('helped_users 列表损坏');
+  }
+  return helpedUsers;
+}
+
+// 保存 helped_users
+async function saveHelpedUsers(userId, helpedUsers) {
+  try {
+    // 使用 Set 和展开运算符去重数组
+    const uniqueArray = [...new Set(helpedUsers)];
+    // 直接更新数据，不需要重新查找
+    await User.update(
+      { helped_users: JSON.stringify(uniqueArray) },
+      { where: { id: userId } },
+    );
+  } catch (error) {
+    // 如果发生错误，抛出客户端错误
+    throw new ServerError('保存 helped_users 失败');
   }
 }
 
@@ -235,4 +299,8 @@ module.exports = {
   saveHelpingUsers,
   getShareInfo,
   saveShareInfo,
+  getHelpedByUsers,
+  saveHelpedByUsers,
+  getHelpedUsers,
+  saveHelpedUsers,
 };
