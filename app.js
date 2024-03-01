@@ -57,7 +57,7 @@ app.use((err, req, res, next) => {
   }
   // 身份认证失败的错误
   if (err.name === 'UnauthorizedError') {
-    return res.status(400).json({
+    return res.status(401).json({
       code: 1,
       message: '身份认证失败！',
     });
