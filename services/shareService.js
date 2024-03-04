@@ -107,10 +107,14 @@ async function cancelShare(id, message) {
   try {
     // 构造一个包含所有异步操作的 Promise 数组
     const promises = helpingUsersIds.map(async (helpingUserId) => {
-      // 从帮助用户的 helping_by_users 字段中删除e5帐号主的用户id
-      await removeUserFromHelpedByUsers(helpingUserId, id);
-      // 发送e5分享注销通知
-      await sendE5ShareClosureNotification(helpingUserId, message, id);
+      try {
+        // 从帮助用户的 helping_by_users 字段中删除e5帐号主的用户id
+        await removeUserFromHelpedByUsers(helpingUserId, id);
+        // 发送e5分享注销通知
+        await sendE5ShareClosureNotification(helpingUserId, message, id);
+      } catch (error) {
+        console.log(error);
+      }
     });
     // 等待所有异步操作完成
     await Promise.all(promises);
