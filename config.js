@@ -66,3 +66,6 @@ exports.notificationType = {
   // e5账号接受者停止分享通知
   e5_share_receiver_stop: 'e5_share_receiver_stop',
 };
+
+// 管理员联系方式
+exports.adminContact = 'X/Twitter: @harukiO_0';

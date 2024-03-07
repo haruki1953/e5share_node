@@ -7,8 +7,8 @@ const cors = require('cors');
 // 解析 token 的中间件
 const expressJWT = require('express-jwt');
 
-// 导入jwt配置文件
-const { jwtConfig, avatarConfig } = require('./config');
+// 导入配置文件
+const { jwtConfig, avatarConfig, adminContact } = require('./config');
 
 // 导入登陆注册路由模块
 const authRouter = require('./router/authRouter');
@@ -66,7 +66,7 @@ app.use((err, req, res, next) => {
   // 未知错误
   return res.status(500).json({
     code: 1,
-    message: '发生未知错误，请联系管理员 X/twitter: @haruki19530615',
+    message: `发生未知错误，请联系管理员 ${adminContact}`,
   });
 });
 
