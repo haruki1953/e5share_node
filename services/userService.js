@@ -212,6 +212,10 @@ async function updateE5info(id, subscriptionDate, expirationDate) {
   if (expDate < subDate) {
     throw new ClientError('到期日期不能早于订阅日期');
   }
+  // 不能为同一天
+  if (subscriptionDate === expirationDate) {
+    throw new ClientError('到期日期与订阅日期不能是同一天');
+  }
 
   // 获取用户
   const user = await findOneUserById(id);
