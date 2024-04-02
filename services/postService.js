@@ -93,7 +93,7 @@ async function clearE5Posts(id) {
   // 确认访问动态权限
   await confirmPostAccessPermission(id, id);
   // 清空
-  await savePosts(id, '[]');
+  await savePosts(id, []);
 }
 
 module.exports = {
