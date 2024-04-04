@@ -2,6 +2,8 @@
 const userService = require('../services/userService');
 // 导入错误处理函数
 const { errorHandler, ClientError } = require('../services/errors/index');
+// 从通知服务导入清空通知函数
+const { clearNotification } = require('../services/notificationService');
 
 // 获取个人信息的处理函数
 exports.getProfile = async (req, res) => {
@@ -150,6 +152,30 @@ exports.updateE5info = async (req, res) => {
   } catch (error) {
     // 如果发生错误，获取错误信息，并根据情况响应错误信息
     const errorInfo = errorHandler(error, '修改失败');
+    res.status(errorInfo.status).json({
+      code: 1,
+      message: errorInfo.message,
+    });
+  }
+};
+
+// 清空通知处理函数
+exports.clearNotif = async (req, res) => {
+  try {
+    // 从请求中获取用户信息
+    const { id } = req.user; // 用户id
+
+    // 清空通知
+    await clearNotification(id);
+
+    // 返回成功的响应
+    res.status(204).json({
+      code: 0,
+      message: '清空通知成功',
+    });
+  } catch (error) {
+    // 如果发生错误，获取错误信息，并根据情况响应错误信息
+    const errorInfo = errorHandler(error, '清空通知失败');
     res.status(errorInfo.status).json({
       code: 1,
       message: errorInfo.message,

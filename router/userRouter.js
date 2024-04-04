@@ -32,6 +32,8 @@ router.put('/avatar', avatarUpload.single('avatar'), userHandler.updateAvatar);
 router.put('/email', expressJoi(updateEmailSchema), userHandler.updateEmail);
 router.put('/password', expressJoi(updatePasswordSchema), userHandler.updatePassword);
 router.put('/e5info', expressJoi(updateE5infoSchema), userHandler.updateE5info);
+// 清空通知
+router.delete('/notifications', userHandler.clearNotif);
 
 // 将路由对象共享出去
 module.exports = router;

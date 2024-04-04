@@ -184,7 +184,7 @@ async function updatePassword(id, oldPassword, newPassword) {
   const user = await findOneUserById(id);
 
   // 确认密码正确
-  await confirmUserPassword(user, oldPassword);
+  confirmUserPassword(user, oldPassword);
 
   // 修改密码 密码加密
   user.password_hash = bcrypt.hashSync(newPassword, 10);

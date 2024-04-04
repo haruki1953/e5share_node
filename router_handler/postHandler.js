@@ -79,7 +79,7 @@ exports.deleteE5Post = async (req, res) => {
   }
 };
 
-// 删除动态的处理函数
+// 清空动态的处理函数
 exports.clearE5Posts = async (req, res) => {
   try {
     // 从请求中获取用户信息

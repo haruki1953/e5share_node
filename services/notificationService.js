@@ -13,6 +13,12 @@ const {
 // 配置文件
 const { notificationType } = require('../config');
 
+// 清空通知服务函数
+const clearNotification = async (userId) => {
+  // 保存空数组
+  await saveNotifications(userId, []);
+};
+
 // 发送通知操作
 async function sendNotification(userId, type, content, otherInfo = {}) {
   // 获取用户通知
@@ -97,6 +103,7 @@ async function sendE5ShareReceiverStopNotification(e5id, content, userId) {
 }
 
 module.exports = {
+  clearNotification,
   sendE5ShareClosureNotification,
   sendE5ShareApplicationNotification,
   sendE5ShareConfirmationNotification,
