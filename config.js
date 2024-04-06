@@ -1,10 +1,26 @@
 // 导入处理路径的核心模块
 const path = require('path');
 
+const dbName = 'database.sqlite';
+const dbPath = path.join(__dirname, './db');
+
 // 数据库配置
 exports.dbConfig = {
   dsl: 'sqlite', // 使用的数据库类型
-  dbfile: path.join(__dirname, './db/database.sqlite'), // 数据库文件路径
+  dbName, // 数据库名
+  dbPath, // 数据库保存路径
+  dbfile: path.join(dbPath, dbName), // 数据库文件路径
+  backupPath: path.join(dbPath, './backups'), // 数据库备份文件保存路径
+  backupType: { // 备份类型
+    StartupBackup: 'StartupBackup',
+    DailyBackup: 'DailyBackup',
+    MonthlyBackup: 'MonthlyBackup',
+  },
+  backupMaxNum: { // 备份数量
+    StartupBackup: 3,
+    DailyBackup: 5,
+    MonthlyBackup: 99,
+  },
 };
 
 // jwt 配置
