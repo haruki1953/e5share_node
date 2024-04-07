@@ -16,10 +16,14 @@ exports.dbConfig = {
     DailyBackup: 'DailyBackup',
     MonthlyBackup: 'MonthlyBackup',
   },
-  backupMaxNum: { // 备份数量
-    StartupBackup: 3,
+  backupMaxNum: { // 备份最大数量
+    StartupBackup: 5,
     DailyBackup: 5,
     MonthlyBackup: 99,
+  },
+  backupCron: { // 备份频率Cron表达式，注意：UTC时间
+    DailyBackup: '0 1 * * *', // 每天凌晨1点执行
+    MonthlyBackup: '1 1 1 * *', // 每月1号凌晨1点1分执行
   },
 };
 
@@ -85,3 +89,40 @@ exports.notificationType = {
 
 // 管理员联系方式
 exports.adminContact = 'X/Twitter: @harukiO_0';
+
+// 日志配置
+const logPath = path.join(__dirname, './logs');
+const logExtension = 'log'; // 日志后缀名
+
+// web日志
+const webLogType = 'web';
+const webLogName = `${webLogType}.${logExtension}`;
+const webLogFile = path.join(logPath, webLogName);
+// // 用户日志
+// const userLogType = 'user';
+// const userLogName = `${userLogType}.${logExtension}`;
+// const userLogFile = path.join(logPath, userLogName);
+// 管理日志
+const adminLogType = 'admin';
+const adminLogName = `${adminLogType}.${logExtension}`;
+const adminLogFile = path.join(logPath, adminLogName);
+
+exports.logConfig = {
+  logPath,
+  logExtension,
+  web: {
+    type: webLogType,
+    name: webLogName,
+    file: webLogFile,
+  },
+  // user: {
+  //   type: userLogType,
+  //   name: userLogName,
+  //   file: userLogFile,
+  // },
+  admin: {
+    type: adminLogType,
+    name: adminLogName,
+    file: adminLogFile,
+  },
+};

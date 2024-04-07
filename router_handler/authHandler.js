@@ -3,14 +3,15 @@ const authService = require('../services/authService');
 // 导入错误处理函数
 const { errorHandler } = require('../services/errors/index');
 
+const { logWeb } = require('../utils/logger');
+
 // 注册用户的处理函数
 exports.register = async (req, res) => {
+  // 从请求中获取用户信息
+  const {
+    username, password, email,
+  } = req.body;
   try {
-    // 从请求中获取用户信息
-    const {
-      username, password, email,
-    } = req.body;
-
     // 在数据库中创建新用户
     await authService.registerUser(username, password, email);
 
@@ -27,16 +28,16 @@ exports.register = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { username, email });
 };
 
 // 用户名登录的处理函数
 exports.loginByUsername = async (req, res) => {
+  // 从请求中获取用户信息
+  const {
+    username, password,
+  } = req.body;
   try {
-    // 从请求中获取用户信息
-    const {
-      username, password,
-    } = req.body;
-
     // 登录操作
     const token = await authService.loginByUsername(username, password);
 
@@ -54,16 +55,16 @@ exports.loginByUsername = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { username });
 };
 
 // 邮箱登录的处理函数
 exports.loginByEmail = async (req, res) => {
+  // 从请求中获取用户信息
+  const {
+    email, password,
+  } = req.body;
   try {
-    // 从请求中获取用户信息
-    const {
-      email, password,
-    } = req.body;
-
     // 登录操作
     const token = await authService.loginByEmail(email, password);
 
@@ -81,4 +82,5 @@ exports.loginByEmail = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { email });
 };

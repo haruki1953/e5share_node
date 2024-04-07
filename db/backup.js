@@ -1,13 +1,14 @@
 // const cron = require('node-cron');
 const fs = require('fs');
 const path = require('path');
+const cron = require('node-cron');
 const { dbConfig } = require('../config');
 
 // 解析备份文件名，获取备份类型
 const getBackupTypeFromFileName = (fileName) => {
   const parts = fileName.split('.');
-  // 倒数第一个后缀为备份类型
-  return parts[parts.length - 1];
+  // 倒数第三个后缀为备份类型
+  return parts[parts.length - 3];
 };
 
 // 解析备份文件名，获取时间戳
@@ -91,7 +92,10 @@ const backupDatabase = (backupType) => {
 
   // 备份文件名
   const dateTime = new Date().toISOString().replace(/[^\d]/g, '');
-  const backupFileName = `${dbConfig.dbName}.${dateTime}.${backupType}`;
+  const nameParts = dbConfig.dbName.split('.');
+  const fileName = nameParts.slice(0, -1).join('.'); // 取最后一个元素前的部分作为文件名
+  const fileExtension = nameParts[nameParts.length - 1]; // 取最后一个元素作为后缀名
+  const backupFileName = `${fileName}.${backupType}.${dateTime}.${fileExtension}`;
   const backupFilePath = path.join(backupDir, backupFileName);
 
   // 复制数据库文件以进行备份
@@ -104,8 +108,33 @@ const backupDatabase = (backupType) => {
 const startupBackupDataBase = async () => {
   backupDatabase(dbConfig.backupType.StartupBackup);
 };
+// 每天备份
+const dailyBackupDataBase = async () => {
+  backupDatabase(dbConfig.backupType.DailyBackup);
+};
+// 每天备份
+const monthlyBackupDataBase = async () => {
+  backupDatabase(dbConfig.backupType.MonthlyBackup);
+};
+
+// 启动备份系统（在app.js中调用）
+const startBackupSystem = async () => {
+  // 启动时备份
+  await startupBackupDataBase();
+  await startupBackupDataBase();
+
+  // node-cron 定时执行备份任务
+  // 每日备份任务
+  cron.schedule(dbConfig.backupCron.DailyBackup, async () => {
+    await dailyBackupDataBase();
+  });
+  // 每月备份任务
+  cron.schedule(dbConfig.backupCron.MonthlyBackup, async () => {
+    await monthlyBackupDataBase();
+  });
+};
 
 // 导出 启动时备份方法，在初始化数据库之前调用
 module.exports = {
-  startupBackupDataBase,
+  startBackupSystem,
 };

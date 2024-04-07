@@ -72,11 +72,11 @@ app.use((err, req, res, next) => {
 
 // 导入数据库初始化函数
 const { initializeDatabase } = require('./db/initialize');
-const { startupBackupDataBase } = require('./db/backup');
+const { startBackupSystem } = require('./db/backup');
 // 启动服务器前初始化数据库
 (async () => {
-  // 备份数据库
-  await startupBackupDataBase();
+  // 启动数据库备份系统
+  await startBackupSystem();
   // 初始化数据库
   await initializeDatabase();
 

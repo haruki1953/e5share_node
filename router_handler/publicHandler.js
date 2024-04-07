@@ -3,6 +3,8 @@ const publicService = require('../services/publicService');
 // 导入错误处理函数
 const { errorHandler } = require('../services/errors/index');
 
+const { logWeb } = require('../utils/logger');
+
 // 获取全部用户信息的处理函数
 exports.getUsers = async (req, res) => {
   try {
@@ -23,4 +25,5 @@ exports.getUsers = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res);
 };

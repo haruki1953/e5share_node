@@ -5,12 +5,13 @@ const { errorHandler, ClientError } = require('../services/errors/index');
 // 从通知服务导入清空通知函数
 const { clearNotification } = require('../services/notificationService');
 
+const { logWeb } = require('../utils/logger');
+
 // 获取个人信息的处理函数
 exports.getProfile = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user;
-
     // 获取个人信息
     const data = await userService.getProfile(id);
 
@@ -28,15 +29,15 @@ exports.getProfile = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id });
 };
 
 // 修改基本信息的处理函数
 exports.updateProfile = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user;
+  const { nickname, contactInfo, bio } = req.body;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user;
-    const { nickname, contactInfo, bio } = req.body;
-
     // 获取个人信息
     await userService.updateProfile(id, nickname, contactInfo, bio);
 
@@ -53,18 +54,23 @@ exports.updateProfile = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, {
+    id, nickname, contactInfo, bio,
+  });
 };
 
 // 修改头像的处理函数
 exports.updateAvatar = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user;
+  let filename = null;
+
   try {
     // 手动判断是否上传了头像
     if (!req.file || req.file.fieldname !== 'avatar') throw new ClientError('头像上传失败');
     // console.log(req.file);
 
-    // 从请求中获取用户信息
-    const { id } = req.user;
-    const { filename } = req.file;
+    filename = req.file.filename;
 
     // 修改头像
     await userService.updateAvatar(id, filename);
@@ -82,15 +88,15 @@ exports.updateAvatar = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id, filename });
 };
 
 // 修改邮箱的处理函数
 exports.updateEmail = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user;
+  const { email } = req.body;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user;
-    const { email } = req.body;
-
     // 修改邮箱
     await userService.updateEmail(id, email);
 
@@ -107,15 +113,15 @@ exports.updateEmail = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id, email });
 };
 
 // 修改密码的处理函数
 exports.updatePassword = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user;
+  const { oldPassword, newPassword } = req.body;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user;
-    const { oldPassword, newPassword } = req.body;
-
     // 修改密码
     await userService.updatePassword(id, oldPassword, newPassword);
 
@@ -132,15 +138,15 @@ exports.updatePassword = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id });
 };
 
 // 修改e5订阅信息的处理函数
 exports.updateE5info = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user;
+  const { subscriptionDate, expirationDate } = req.body;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user;
-    const { subscriptionDate, expirationDate } = req.body;
-
     // 修改e5订阅信息
     await userService.updateE5info(id, subscriptionDate, expirationDate);
 
@@ -157,14 +163,14 @@ exports.updateE5info = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id, subscriptionDate, expirationDate });
 };
 
 // 清空通知处理函数
 exports.clearNotif = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user; // 用户id
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user; // 用户id
-
     // 清空通知
     await clearNotification(id);
 
@@ -181,4 +187,5 @@ exports.clearNotif = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id });
 };

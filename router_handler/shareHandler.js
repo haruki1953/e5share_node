@@ -3,13 +3,14 @@ const shareService = require('../services/shareService');
 // 导入错误处理函数
 const { errorHandler } = require('../services/errors/index');
 
+const { logWeb } = require('../utils/logger');
+
 // 登记分享处理函数
 exports.registerShare = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user; // 用户id
+  const { subscriptionDate, expirationDate } = req.body;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user; // 用户id
-    const { subscriptionDate, expirationDate } = req.body;
-
     // 登记分享
     await shareService.registerShare(id, subscriptionDate, expirationDate);
 
@@ -26,15 +27,15 @@ exports.registerShare = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id, subscriptionDate, expirationDate });
 };
 
 // 注销分享处理函数
 exports.cancelShare = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user; // 用户id
+  const { message } = req.body;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user; // 用户id
-    const { message } = req.body;
-
     // 注销分享
     await shareService.cancelShare(id, message);
 
@@ -51,15 +52,15 @@ exports.cancelShare = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id, message });
 };
 
 // 申请分享处理函数
 exports.sendApplication = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user; // 用户id
+  const { e5id, message } = req.body;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user; // 用户id
-    const { e5id, message } = req.body;
-
     // 分享申请
     const data = await shareService.sendApplication(id, e5id, message);
 
@@ -77,14 +78,14 @@ exports.sendApplication = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id, e5id, message });
 };
 
 // 获取分享信息处理函数
 exports.getE5ShareInfo = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user; // 用户id
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user; // 用户id
-
     // 获取分享信息
     const data = await shareService.getE5ShareInfo(id);
 
@@ -102,15 +103,15 @@ exports.getE5ShareInfo = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id });
 };
 
 // 添加分享信息处理函数
 exports.addE5ShareInfo = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user; // 用户id
+  const { userId, note } = req.body;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user; // 用户id
-    const { userId, note } = req.body;
-
     // 添加分享信息
     const data = await shareService.addE5ShareInfo(id, userId, note);
 
@@ -128,15 +129,15 @@ exports.addE5ShareInfo = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id, userId, note });
 };
 
 // 修改分享信息处理函数
 exports.updateE5ShareInfo = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user; // 用户id
+  const { userId, note } = req.body;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user; // 用户id
-    const { userId, note } = req.body;
-
     // 修改分享信息
     const data = await shareService.updateE5ShareInfo(id, userId, note);
 
@@ -154,15 +155,15 @@ exports.updateE5ShareInfo = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id, userId, note });
 };
 
 // 删除分享信息处理函数
 exports.deleteE5ShareInfo = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user; // 用户id
+  const { userId } = req.params;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user; // 用户id
-    const { userId } = req.params;
-
     // 删除分享信息
     await shareService.deleteE5ShareInfo(id, userId);
 
@@ -179,15 +180,15 @@ exports.deleteE5ShareInfo = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id, userId });
 };
 
 // 发送分享确认处理函数
 exports.sendConfirmation = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user; // 用户id
+  const { userId, message } = req.body;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user; // 用户id
-    const { userId, message } = req.body;
-
     // 发送分享确认
     const data = await shareService.sendConfirmation(id, userId, message);
 
@@ -205,15 +206,15 @@ exports.sendConfirmation = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id, userId, message });
 };
 
 // 接受分享确认处理函数
 exports.acceptConfirmation = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user; // 用户id
+  const { e5id, message } = req.body;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user; // 用户id
-    const { e5id, message } = req.body;
-
     // 接受分享确认
     const data = await shareService.acceptConfirmation(id, e5id, message);
 
@@ -231,15 +232,15 @@ exports.acceptConfirmation = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id, e5id, message });
 };
 
 // e5账号主停止对用户的分享
 exports.stopSharing = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user; // 用户id
+  const { userId, message } = req.body;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user; // 用户id
-    const { userId, message } = req.body;
-
     // e5账号主停止分享
     const data = await shareService.stopSharing(id, userId, message);
 
@@ -257,15 +258,15 @@ exports.stopSharing = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id, userId, message });
 };
 
 // 用户停止接受e5账号主的分享
 exports.stopReceiving = async (req, res) => {
+  // 从请求中获取用户信息
+  const { id } = req.user; // 用户id
+  const { e5id, message } = req.body;
   try {
-    // 从请求中获取用户信息
-    const { id } = req.user; // 用户id
-    const { e5id, message } = req.body;
-
     // 用户停止接受e5账号主的分享
     const data = await shareService.stopReceiving(id, e5id, message);
 
@@ -283,4 +284,5 @@ exports.stopReceiving = async (req, res) => {
       message: errorInfo.message,
     });
   }
+  logWeb(req, res, { id, e5id, message });
 };
