@@ -33,6 +33,9 @@ const bio = joi.string().max(500).allow('').required()
 // 日期字符串的校验规则
 const date = joi.string().regex(/^\d{4}-\d{2}-\d{2}$/).required();
 
+// userId 的校验规则
+const userId = joi.number().integer().min(1).required();
+
 // 注册表单的验证规则对象
 exports.regUserSchema = {
   // 表示需要对 req.body 中的数据进行验证
@@ -94,5 +97,12 @@ exports.updateE5infoSchema = {
   body: {
     subscriptionDate: date,
     expirationDate: date,
+  },
+};
+
+// 获取用户最后登录时间的验证规则对象
+exports.getLastLoginTimeSchema = {
+  params: {
+    userId,
   },
 };

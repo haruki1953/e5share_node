@@ -53,7 +53,8 @@ async function getProfile(id) {
     contact_info: user.contact_info,
     bio: user.bio,
     registered_at: user.registered_at,
-    last_login: user.last_login,
+    // 【240408】为了使客户端缓存副本发挥作用，排除last_login
+    // last_login: user.last_login,
     account_status: user.account_status,
     e5_subscription_date: user.e5_subscription_date,
     e5_expiration_date: user.e5_expiration_date,
@@ -232,6 +233,13 @@ async function updateE5info(id, subscriptionDate, expirationDate) {
   return user;
 }
 
+// 获取用户最后登录时间
+async function getLastLoginTime(userId) {
+  // 获取用户
+  const user = await findOneUserById(userId);
+  return user.last_login;
+}
+
 module.exports = {
   // 接口对应的业务操作
   getProfile,
@@ -240,4 +248,5 @@ module.exports = {
   updateEmail,
   updatePassword,
   updateE5info,
+  getLastLoginTime,
 };

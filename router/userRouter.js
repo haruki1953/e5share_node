@@ -15,6 +15,7 @@ const {
   updateEmailSchema,
   updatePasswordSchema,
   updateE5infoSchema,
+  getLastLoginTimeSchema,
 } = require('../schema/userSchema');
 
 // 创建 multer 的实例对象，通过 dest 属性指定文件的存放路径
@@ -34,6 +35,8 @@ router.put('/password', expressJoi(updatePasswordSchema), userHandler.updatePass
 router.put('/e5info', expressJoi(updateE5infoSchema), userHandler.updateE5info);
 // 清空通知
 router.delete('/notifications', userHandler.clearNotif);
+// 获取用户最后登录时间
+router.get('/last-login/:userId', expressJoi(getLastLoginTimeSchema), userHandler.getLastLoginTime);
 
 // 将路由对象共享出去
 module.exports = router;

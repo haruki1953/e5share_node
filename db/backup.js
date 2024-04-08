@@ -121,17 +121,11 @@ const monthlyBackupDataBase = async () => {
 const startBackupSystem = async () => {
   // 启动时备份
   await startupBackupDataBase();
-  await startupBackupDataBase();
-
   // node-cron 定时执行备份任务
   // 每日备份任务
-  cron.schedule(dbConfig.backupCron.DailyBackup, async () => {
-    await dailyBackupDataBase();
-  });
+  cron.schedule(dbConfig.backupCron.DailyBackup, dailyBackupDataBase);
   // 每月备份任务
-  cron.schedule(dbConfig.backupCron.MonthlyBackup, async () => {
-    await monthlyBackupDataBase();
-  });
+  cron.schedule(dbConfig.backupCron.MonthlyBackup, monthlyBackupDataBase);
 };
 
 // 导出 启动时备份方法，在初始化数据库之前调用

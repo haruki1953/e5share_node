@@ -2,7 +2,7 @@
 const path = require('path');
 
 const dbName = 'database.sqlite';
-const dbPath = path.join(__dirname, './db');
+const dbPath = path.join(__dirname, 'db/');
 
 // 数据库配置
 exports.dbConfig = {
@@ -10,7 +10,7 @@ exports.dbConfig = {
   dbName, // 数据库名
   dbPath, // 数据库保存路径
   dbfile: path.join(dbPath, dbName), // 数据库文件路径
-  backupPath: path.join(dbPath, './backups'), // 数据库备份文件保存路径
+  backupPath: path.join(dbPath, 'backups/'), // 数据库备份文件保存路径
   backupType: { // 备份类型
     StartupBackup: 'StartupBackup',
     DailyBackup: 'DailyBackup',
@@ -35,8 +35,8 @@ exports.jwtConfig = {
 
 // 头像配置
 exports.avatarConfig = {
-  uploadPath: path.join(__dirname, './uploads'), // 上传时的临时保存路径
-  savePath: path.join(__dirname, './uploads/avatar'), // 处理后的保存路径
+  uploadPath: path.join(__dirname, 'uploads/'), // 上传时的临时保存路径
+  savePath: path.join(__dirname, 'uploads/avatar/'), // 处理后的保存路径
   size: 256, // 图片大小
   quality: 64, // 图片质量
 };
@@ -91,7 +91,7 @@ exports.notificationType = {
 exports.adminContact = 'X/Twitter: @harukiO_0';
 
 // 日志配置
-const logPath = path.join(__dirname, './logs');
+const logPath = path.join(__dirname, 'logs/');
 const logExtension = 'log'; // 日志后缀名
 
 // web日志
@@ -110,10 +110,17 @@ const adminLogFile = path.join(logPath, adminLogName);
 exports.logConfig = {
   logPath,
   logExtension,
+
+  // 日志切割后的保存路径
+  backupPath: path.join(logPath, 'backups/'),
   web: {
     type: webLogType,
     name: webLogName,
     file: webLogFile,
+    // 日志切割大小 10MB
+    rotateSize: 10 * 1024 * 1024,
+    // 最大备份个数
+    backupMaxNum: 5,
   },
   // user: {
   //   type: userLogType,
@@ -124,5 +131,9 @@ exports.logConfig = {
     type: adminLogType,
     name: adminLogName,
     file: adminLogFile,
+    // 日志切割大小 10MB
+    rotateSize: 10 * 1024 * 1024,
+    // 最大备份个数
+    backupMaxNum: 5,
   },
 };
