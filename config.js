@@ -32,6 +32,11 @@ exports.jwtConfig = {
   secretKey: 'test ^_^',
   expiresIn: '120d', // token 有效期为 120天
 };
+// 管理系统使用的jwt
+exports.jwtAdmin = {
+  secretKey: 'test >_<',
+  expiresIn: '30d', // token 有效期为 30天
+};
 
 // 头像配置
 exports.avatarConfig = {

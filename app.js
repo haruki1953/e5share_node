@@ -20,6 +20,8 @@ const publicRouter = require('./router/publicRouter');
 const postRouter = require('./router/postRouter');
 // 导入e5分享路由模块
 const shareRouter = require('./router/shareRouter');
+// 导入管理模块
+const adminRouter = require('./router/adminRouter');
 
 // 创建 express 的服务器实例
 const app = express();
@@ -28,8 +30,9 @@ const app = express();
 app.use(cors());
 // 解析 JSON 格式的请求体数据
 app.use(express.json());
-// 设置 expressJWT 中间件，除了 /auth /public 开头的路径需要 token 认证
-app.use(expressJWT({ secret: jwtConfig.secretKey }).unless({ path: [/^\/auth\//, /^\/public\//, /^\/static\//] }));
+// 设置 expressJWT 中间件，除了 /auth /public /static /admin 开头的路径需要 token 认证
+app.use(expressJWT({ secret: jwtConfig.secretKey })
+  .unless({ path: [/^\/auth/, /^\/public/, /^\/static/, /^\/admin/] }));
 
 // 托管静态资源文件 记得排除鉴权
 app.use('/static/avatar', express.static(avatarConfig.savePath));
@@ -44,6 +47,8 @@ app.use('/public', publicRouter);
 app.use('/e5post', postRouter);
 // e5分享路由模块
 app.use('/e5share', shareRouter);
+// 管理模块
+app.use('/admin', adminRouter);
 
 /** * 全局错误中间件** */
 // eslint-disable-next-line no-unused-vars

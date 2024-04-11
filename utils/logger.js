@@ -93,8 +93,6 @@ const log = (logFile, data) => {
 // 记录网站日志，在响应后调用，info为参数之类的相关信息
 const logWeb = async (req, res, info = null) => {
   try {
-    // 切割日志
-    rotateLogFile(logConfig.web);
     // 日志数据
     const logData = {
       method: req.method,
@@ -105,6 +103,8 @@ const logWeb = async (req, res, info = null) => {
       info,
     };
     log(logConfig.web.file, logData);
+    // 切割日志
+    rotateLogFile(logConfig.web);
   } catch (error) {
     console.error('logWeb: ', error);
   }
@@ -113,16 +113,15 @@ const logWeb = async (req, res, info = null) => {
 // 记录管理员日志
 const logAdmin = (req, res, info = null) => {
   try {
-    rotateLogFile(logConfig.admin);
     const logData = {
       method: req.method,
       url: req.originalUrl,
       ip: req.ip,
-      adminId: req.user?.id || null,
       statusCode: res.statusCode,
       info,
     };
     log(logConfig.admin.file, logData);
+    rotateLogFile(logConfig.admin);
   } catch (error) {
     console.error('logAdmin: ', error);
   }
