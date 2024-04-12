@@ -13,7 +13,14 @@ const { jwtAdmin } = require('../config');
 const adminHandler = require('../router_handler/adminHandler');
 
 // 导入需要的验证规则对象
-const { loginAdminSchema } = require('../schema/adminSchema');
+const {
+  loginAdminSchema,
+  updateAdminSchema,
+  updateAuthSchema,
+  registerUserSchema,
+  updateUserPasswordSchema,
+  deleteUserSchema,
+} = require('../schema/adminSchema');
 
 // 创建路由对象
 const router = express.Router();
@@ -24,8 +31,14 @@ router.use(expressJWT({ secret: jwtAdmin.secretKey })
 
 router.post('/login', expressJoi(loginAdminSchema), adminHandler.loginAdmin);
 router.get('/', adminHandler.getAdmin);
-// router.put('/', adminHandler.updateAdmin);
-// router.delete('/user', adminHandler.deleteUser);
+router.put('/', expressJoi(updateAdminSchema), adminHandler.updateAdmin);
+router.put('/auth', expressJoi(updateAuthSchema), adminHandler.updateAuth);
+
+router.get('/users', adminHandler.getUsers);
+router.post('/user/register', expressJoi(registerUserSchema), adminHandler.registerUser);
+router.put('/user/password', expressJoi(updateUserPasswordSchema), adminHandler.updateUserPassword);
+router.delete('/user/:userId', expressJoi(deleteUserSchema), adminHandler.deleteUser);
+
 // router.post('/notification', adminHandler.sendNotif);
 
 // 将路由对象共享出去

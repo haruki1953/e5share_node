@@ -21,7 +21,7 @@ loadConfigData();
 // 将数据保存回 config.json 文件
 function saveConfigData(configData) {
   const data = JSON.stringify(configData, null, 2);
-  fs.writeFileSync('./config.json', data, 'utf8');
+  fs.writeFileSync(configPath, data, 'utf8');
 }
 
 const getAdminConfig = () => ({ ...adminConfig });
@@ -36,7 +36,7 @@ const updateAdminAuth = (username, password) => {
   loadConfigData();
 };
 
-const updateCouldRegister = (couldRegister) => {
+const updateAdminInfo = (couldRegister) => {
   adminConfig.couldRegister = couldRegister;
   saveConfigData(adminConfig);
   loadConfigData();
@@ -48,5 +48,5 @@ module.exports = {
   getAdminPassword,
   getCouldRegister,
   updateAdminAuth,
-  updateCouldRegister,
+  updateAdminInfo,
 };

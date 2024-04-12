@@ -1,9 +1,15 @@
 // 导入业务逻辑操作
 const authService = require('../services/authService');
 // 导入错误处理函数
-const { errorHandler } = require('../services/errors/index');
+const { errorHandler, ServerError } = require('../services/errors/index');
 
 const { logWeb } = require('../utils/logger');
+
+const { adminContact } = require('../config');
+// admin配置模块
+const {
+  getCouldRegister,
+} = require('../admin/index');
 
 // 注册用户的处理函数
 exports.register = async (req, res) => {
@@ -11,7 +17,12 @@ exports.register = async (req, res) => {
   const {
     username, password, email,
   } = req.body;
+  let couldRegister;
   try {
+    couldRegister = getCouldRegister();
+    if (!couldRegister) {
+      throw new ServerError(`注册已关闭，获取账号请联系管理员 ${adminContact}`);
+    }
     // 在数据库中创建新用户
     await authService.registerUser(username, password, email);
 
@@ -28,7 +39,7 @@ exports.register = async (req, res) => {
       message: errorInfo.message,
     });
   }
-  logWeb(req, res, { username, email });
+  logWeb(req, res, { username, email, couldRegister });
 };
 
 // 用户名登录的处理函数

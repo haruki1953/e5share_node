@@ -68,6 +68,7 @@ app.use((err, req, res, next) => {
     });
   }
 
+  console.log(err);
   // 未知错误
   return res.status(500).json({
     code: 1,

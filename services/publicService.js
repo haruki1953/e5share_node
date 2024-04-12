@@ -4,13 +4,23 @@ const { User } = require('../models/index');
 const { ServerError } = require('./errors/index');
 
 // 获取全部用户信息
-async function getUsers() {
+async function getUsers(isAdmin = false) {
   try {
-    // 查询所有用户信息，排除密码和备注字段，排除last_login,updatedAt字段
-    const users = await User.findAll({
-      attributes: { exclude: ['password_hash', 'note', 'last_login', 'updatedAt'] },
-      raw: true, // 指示返回原始的 JSON 对象
-    });
+    let users;
+
+    if (isAdmin) {
+      // 管理员调用时
+      users = await User.findAll({
+        attributes: { exclude: ['password_hash'] },
+        raw: true, // 指示返回原始的 JSON 对象
+      });
+    } else {
+      // 查询所有用户信息，排除密码和备注字段，排除last_login,updatedAt字段
+      users = await User.findAll({
+        attributes: { exclude: ['password_hash', 'note', 'last_login', 'updatedAt'] },
+        raw: true, // 指示返回原始的 JSON 对象
+      });
+    }
     return users;
   } catch (error) {
     // 如果发生错误，抛出服务器错误

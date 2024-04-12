@@ -180,12 +180,12 @@ async function updateEmail(id, email) {
 }
 
 // 修改密码
-async function updatePassword(id, oldPassword, newPassword) {
+async function updatePassword(id, oldPassword, newPassword, isAdmin = false) {
   // 获取用户
   const user = await findOneUserById(id);
 
-  // 确认密码正确
-  confirmUserPassword(user, oldPassword);
+  // 确认密码正确 非管理员时需确认密码
+  if (!isAdmin) { confirmUserPassword(user, oldPassword); }
 
   // 修改密码 密码加密
   user.password_hash = bcrypt.hashSync(newPassword, 10);

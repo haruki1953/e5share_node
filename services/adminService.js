@@ -11,7 +11,22 @@ const {
   getAdminUsername,
   getAdminPassword,
   getAdminConfig,
+  updateAdminInfo,
+  updateAdminAuth,
 } = require('../admin/index');
+
+// 已定义的业务操作
+const { cancelShare, stopReceiving } = require('./shareService');
+
+// 数据模块
+const {
+  getHelpingByUsers,
+} = require('./dataService');
+
+// 用于操作数据库的模型
+const {
+  User, UserE5Post, UserNotification, UsersE5SharedInfo,
+} = require('../models/index');
 
 // 管理员登录
 const loginAdmin = async (username, password) => {
@@ -35,7 +50,43 @@ const getAdmin = async () => {
   return data;
 };
 
+// 修改管理员信息
+const updateAdmin = async (couldRegister) => {
+  updateAdminInfo(couldRegister);
+};
+
+// 修改登录信息
+const updateAuth = async (username, password) => {
+  updateAdminAuth(username, password);
+};
+
+// 用户注销
+async function deleteUser(userId) {
+  // 获取helping_by_users，用户不存在则会抛出错误
+  const helpingByUsers = await getHelpingByUsers(userId);
+
+  // 停止接受分享
+  const promises = helpingByUsers.map(async (helpingByUserId) => {
+    // 停止接受分享
+    await stopReceiving(userId, helpingByUserId, '用户已注销').catch(() => {});
+  });
+    // 等待所有异步操作完成
+  await Promise.all(promises).catch(() => {});
+
+  // 注销分享
+  await cancelShare(userId, '用户已注销').catch(() => {});
+
+  // 从 通知表、动态表、分享信息表、用户表，中删除（注意顺序，因为有外键）
+  await UserNotification.destroy({ where: { user_id: userId } }).catch(() => {});
+  await UserE5Post.destroy({ where: { user_id: userId } }).catch(() => {});
+  await UsersE5SharedInfo.destroy({ where: { user_id: userId } }).catch(() => {});
+  await User.destroy({ where: { id: userId } }).catch(() => {});
+}
+
 module.exports = {
   loginAdmin,
   getAdmin,
+  updateAdmin,
+  updateAuth,
+  deleteUser,
 };
