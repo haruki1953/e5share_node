@@ -12,13 +12,11 @@ async function getUsers(isAdmin = false) {
       // 管理员调用时
       users = await User.findAll({
         attributes: { exclude: ['password_hash'] },
-        raw: true, // 指示返回原始的 JSON 对象
       });
     } else {
       // 查询所有用户信息，排除密码和备注字段，排除last_login,updatedAt字段
       users = await User.findAll({
         attributes: { exclude: ['password_hash', 'note', 'last_login', 'updatedAt'] },
-        raw: true, // 指示返回原始的 JSON 对象
       });
     }
     return users;

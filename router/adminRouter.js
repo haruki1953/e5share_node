@@ -39,7 +39,5 @@ router.post('/user/register', expressJoi(registerUserSchema), adminHandler.regis
 router.put('/user/password', expressJoi(updateUserPasswordSchema), adminHandler.updateUserPassword);
 router.delete('/user/:userId', expressJoi(deleteUserSchema), adminHandler.deleteUser);
 
-// router.post('/notification', adminHandler.sendNotif);
-
 // 将路由对象共享出去
 module.exports = router;

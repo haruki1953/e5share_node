@@ -111,6 +111,14 @@ const webLogFile = path.join(logPath, webLogName);
 const adminLogType = 'admin';
 const adminLogName = `${adminLogType}.${logExtension}`;
 const adminLogFile = path.join(logPath, adminLogName);
+// 错误日志
+const errorLogType = 'error';
+const errorLogName = `${errorLogType}.${logExtension}`;
+const errorLogFile = path.join(logPath, errorLogName);
+// 警告日志
+const warnLogType = 'warn';
+const warnLogName = `${warnLogType}.${logExtension}`;
+const warnLogFile = path.join(logPath, warnLogName);
 
 exports.logConfig = {
   logPath,
@@ -122,23 +130,30 @@ exports.logConfig = {
     type: webLogType,
     name: webLogName,
     file: webLogFile,
-    // 日志切割大小 10MB
-    rotateSize: 10 * 1024 * 1024,
+    // 日志切割大小 5MB
+    rotateSize: 5 * 1024 * 1024,
     // 最大备份个数
     backupMaxNum: 5,
   },
-  // user: {
-  //   type: userLogType,
-  //   name: userLogName,
-  //   file: userLogFile,
-  // },
   admin: {
     type: adminLogType,
     name: adminLogName,
     file: adminLogFile,
-    // 日志切割大小 10MB
-    rotateSize: 10 * 1024 * 1024,
-    // 最大备份个数
-    backupMaxNum: 5,
+    rotateSize: 2 * 1024 * 1024,
+    backupMaxNum: 2,
+  },
+  error: {
+    type: errorLogType,
+    name: errorLogName,
+    file: errorLogFile,
+    rotateSize: 2 * 1024 * 1024,
+    backupMaxNum: 2,
+  },
+  warn: {
+    type: warnLogType,
+    name: warnLogName,
+    file: warnLogFile,
+    rotateSize: 1 * 1024 * 1024,
+    backupMaxNum: 2,
   },
 };

@@ -37,6 +37,8 @@ router.put('/e5info', expressJoi(updateE5infoSchema), userHandler.updateE5info);
 router.delete('/notifications', userHandler.clearNotif);
 // 获取用户最后登录时间
 router.get('/last-login/:userId', expressJoi(getLastLoginTimeSchema), userHandler.getLastLoginTime);
+// 注销用户
+router.delete('/', userHandler.deleteUser);
 
 // 将路由对象共享出去
 module.exports = router;

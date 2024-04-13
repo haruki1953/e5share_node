@@ -98,7 +98,7 @@ const logWeb = async (req, res, info = null) => {
       method: req.method,
       url: req.originalUrl,
       ip: req.ip,
-      userId: req.user?.id || null,
+      userId: req.user?.id,
       statusCode: res.statusCode,
       info,
     };
@@ -110,7 +110,7 @@ const logWeb = async (req, res, info = null) => {
   }
 };
 
-// 记录管理员日志
+// 记录管理日志
 const logAdmin = (req, res, info = null) => {
   try {
     const logData = {
@@ -127,8 +127,60 @@ const logAdmin = (req, res, info = null) => {
   }
 };
 
+// 记录错误日志
+const logError = (errorInfo, otherInfo, req = null, res = null) => {
+  try {
+    let webInfo = null;
+    if (req && res) {
+      webInfo = {
+        method: req.method,
+        url: req.originalUrl,
+        ip: req.ip,
+        userId: req.user?.id,
+        statusCode: res.statusCode,
+      };
+    }
+    const logData = {
+      errorInfo,
+      otherInfo,
+      webInfo,
+    };
+    log(logConfig.error.file, logData);
+    rotateLogFile(logConfig.error);
+  } catch (error) {
+    console.error('logError: ', error);
+  }
+};
+
+// 记录警告日志
+const logWarn = (errorInfo, otherInfo, req = null, res = null) => {
+  try {
+    let webInfo = null;
+    if (req && res) {
+      webInfo = {
+        method: req.method,
+        url: req.originalUrl,
+        ip: req.ip,
+        userId: req.user?.id,
+        statusCode: res.statusCode,
+      };
+    }
+    const logData = {
+      errorInfo,
+      otherInfo,
+      webInfo,
+    };
+    log(logConfig.warn.file, logData);
+    rotateLogFile(logConfig.warn);
+  } catch (error) {
+    console.error('logWarn: ', error);
+  }
+};
+
 module.exports = {
   logWeb,
   // logUser,
   logAdmin,
+  logError,
+  logWarn,
 };

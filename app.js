@@ -50,30 +50,51 @@ app.use('/e5share', shareRouter);
 // 管理模块
 app.use('/admin', adminRouter);
 
+const { logWarn, logError } = require('./utils/logger');
 /** * 全局错误中间件** */
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   // 数据验证失败的错误
   if (err instanceof joi.ValidationError) {
-    return res.status(400).json({
+    const message = '请求参数格式错误';
+    res.status(400).json({
       code: 1,
-      message: '请求参数格式错误',
+      message,
     });
+    return logWarn(
+      err,
+      { file: 'app.js', method: 'Global Error Handling Middleware: ValidationError', message },
+      req,
+      res,
+    );
   }
   // 身份认证失败的错误
   if (err.name === 'UnauthorizedError') {
-    return res.status(401).json({
+    const message = '身份认证失败！';
+    res.status(401).json({
       code: 1,
-      message: '身份认证失败！',
+      message,
     });
+    return logWarn(
+      err,
+      { file: 'app.js', method: 'Global Error Handling Middleware: UnauthorizedError', message },
+      req,
+      res,
+    );
   }
 
-  console.log(err);
   // 未知错误
-  return res.status(500).json({
+  const message = `发生未知错误，请联系管理员 ${adminContact}`;
+  res.status(500).json({
     code: 1,
-    message: `发生未知错误，请联系管理员 ${adminContact}`,
+    message,
   });
+  return logError(
+    err,
+    { file: 'app.js', method: 'Global Error Handling Middleware', message },
+    req,
+    res,
+  );
 });
 
 // 导入数据库初始化函数

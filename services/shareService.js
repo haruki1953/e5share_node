@@ -37,6 +37,8 @@ const {
   accountStatus,
 } = require('../config');
 
+const { logError } = require('../utils/logger');
+
 // 确认当前状态可以进行登记分享
 async function confirmStatusCanRegistration(id) {
   const user = await findOneUserById(id);
@@ -113,14 +115,20 @@ async function cancelShare(id, message) {
         // 发送e5分享注销通知
         await sendE5ShareClosureNotification(helpingUserId, message, id);
       } catch (error) {
-        console.log(error);
+        logError(
+          error,
+          { file: 'shareService.js', method: 'cancelShare', message: `${id} 解除与 用户${helpingUserId} 的分享失败` },
+        );
       }
     });
     // 等待所有异步操作完成
     await Promise.all(promises);
   } catch (error) {
-    // 如果发生错误，抛出客户端错误
-    throw new ServerError('修改失败');
+    logError(
+      error,
+      { file: 'shareService.js', method: 'cancelShare', message: `${id} 解除与其他用户的分享失败` },
+    );
+    throw new ServerError('解除与其他用户的分享失败');
   }
 
   // 修改状态并重置e5相关信息
