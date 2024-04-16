@@ -22,8 +22,8 @@ exports.dbConfig = {
     MonthlyBackup: 99,
   },
   backupCron: { // 备份频率Cron表达式，注意：UTC时间
-    DailyBackup: '0 1 * * *', // 每天凌晨1点执行
-    MonthlyBackup: '1 1 1 * *', // 每月1号凌晨1点1分执行
+    DailyBackup: '0 17 * * *', // 每天北京时间凌晨1点执行
+    MonthlyBackup: '1 17 1 * *', // 每月2号凌晨1点1分执行
   },
 };
 
@@ -44,6 +44,7 @@ exports.avatarConfig = {
   savePath: path.join(__dirname, 'uploads/avatar/'), // 处理后的保存路径
   size: 256, // 图片大小
   quality: 64, // 图片质量
+  cacheMaxAge: '1y', // 浏览器缓存时间 y年 m月 d天
 };
 
 // 用户状态配置

@@ -35,7 +35,9 @@ app.use(expressJWT({ secret: jwtConfig.secretKey })
   .unless({ path: [/^\/auth/, /^\/public/, /^\/static/, /^\/admin/] }));
 
 // 托管静态资源文件 记得排除鉴权
-app.use('/static/avatar', express.static(avatarConfig.savePath));
+app.use('/static/avatar', express.static(avatarConfig.savePath, {
+  maxAge: avatarConfig.cacheMaxAge, // 设置缓存一年 '1y'
+}));
 
 // 注册登录路由模块
 app.use('/auth', authRouter);
