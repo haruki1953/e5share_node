@@ -1,5 +1,5 @@
 {
-  "username": "example_user",
-  "password": "example_password",
-  "couldRegister": false
+  "username": "admin",
+  "password": "adminadmin",
+  "couldRegister": true
 }
