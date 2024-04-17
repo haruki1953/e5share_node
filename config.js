@@ -2,7 +2,7 @@
 const path = require('path');
 
 const dbName = 'database.sqlite';
-const dbPath = path.join(__dirname, 'db/');
+const dbPath = path.join(__dirname, 'data/');
 
 // 数据库配置
 exports.dbConfig = {
