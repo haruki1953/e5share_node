@@ -29,12 +29,12 @@ exports.dbConfig = {
 
 // jwt 配置
 exports.jwtConfig = {
-  secretKey: 'test ^_^',
+  secretKey: process.env.E5SHARE_NODE_JWT_SECRET_KEY || '^_^',
   expiresIn: '120d', // token 有效期为 120天
 };
 // 管理系统使用的jwt
 exports.jwtAdmin = {
-  secretKey: 'test >_<',
+  secretKey: process.env.E5SHARE_NODE_ADMIN_JWT_SECRET_KEY || '> <',
   expiresIn: '30d', // token 有效期为 30天
 };
 

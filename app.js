@@ -8,7 +8,11 @@ const cors = require('cors');
 const expressJWT = require('express-jwt');
 
 // 导入配置文件
-const { jwtConfig, avatarConfig, adminContact } = require('./config');
+const {
+  avatarConfig, adminContact, jwtConfig, // jwtAdmin
+} = require('./config');
+
+// console.log(jwtConfig, jwtAdmin);
 
 // 导入登陆注册路由模块
 const authRouter = require('./router/authRouter');
