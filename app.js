@@ -109,8 +109,9 @@ const { startBackupSystem } = require('./db/backup');
   // 初始化数据库
   await initializeDatabase();
 
+  const port = process.env.E5SHARE_NODE_PORT || 23769;
   // 调用 app.listen 方法，指定端口号并启动web服务器
-  app.listen(3007, () => {
-    console.log('api server running at http://127.0.0.1:3007');
+  app.listen(port, () => {
+    console.log(`api server running at http://127.0.0.1:${port}`);
   });
 })();
