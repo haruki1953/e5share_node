@@ -1,7 +1,8 @@
 const fs = require('fs').promises;
 const path = require('path');
 // 图片处理模块
-const sharp = require('sharp');
+const Jimp = require('jimp');
+
 // 密码加密
 const bcrypt = require('bcryptjs');
 // 日期解析
@@ -108,20 +109,18 @@ async function processAvatar(filename) {
   // 保存文件 拼接.jpg
   const saveFileName = `${filename}.jpg`;
   const saveFilePath = path.join(avatarConfig.savePath, saveFileName);
+
+  // 确保保存目录存在
+  await confirmSaveFolderExists(avatarConfig.savePath);
   try {
     // 读取输入图片文件
-    const inputBuffer = await fs.readFile(inputFilePath);
+    const inputImage = await Jimp.read(inputFilePath);
 
-    // 使用 sharp 库处理图片
-    const outputBuffer = await sharp(inputBuffer)
-      .resize(avatarConfig.size, avatarConfig.size, { fit: 'cover' }) // 调整为 256x256 的正方形
-      .jpeg({ quality: avatarConfig.quality }) // 设置 JPEG 图片质量
-      .toBuffer(); // 转换为 Buffer
+    // 调整大小并设置封面效果
+    inputImage.cover(avatarConfig.size, avatarConfig.size);
 
-    // 确保保存目录存在
-    await confirmSaveFolderExists(avatarConfig.savePath);
-    // 将处理后的图片数据写入到输出文件中
-    await fs.writeFile(saveFilePath, outputBuffer);
+    // 保存为 JPEG 格式并设置质量
+    await inputImage.quality(avatarConfig.quality).writeAsync(saveFilePath);
 
     // 删除原始图片
     fs.unlink(inputFilePath).catch(() => {});

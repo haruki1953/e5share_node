@@ -4,3 +4,4 @@
 /db/backups
 /logs
 /data
+/utils/jwtKeys.json

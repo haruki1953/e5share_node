@@ -1,6 +1,8 @@
 // 导入处理路径的核心模块
 const path = require('path');
 
+const jwtKeys = require('./utils/jwtKeys');
+
 const dbName = 'database.sqlite';
 const dbPath = path.join(__dirname, 'data/');
 
@@ -29,12 +31,12 @@ exports.dbConfig = {
 
 // jwt 配置
 exports.jwtConfig = {
-  secretKey: process.env.E5SHARE_NODE_JWT_SECRET_KEY || '^_^',
+  secretKey: jwtKeys.jwtSecretKey,
   expiresIn: '120d', // token 有效期为 120天
 };
 // 管理系统使用的jwt
 exports.jwtAdmin = {
-  secretKey: process.env.E5SHARE_NODE_ADMIN_JWT_SECRET_KEY || '> <',
+  secretKey: jwtKeys.adminSecretKey,
   expiresIn: '30d', // token 有效期为 30天
 };
 
