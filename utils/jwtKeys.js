@@ -7,6 +7,12 @@ function generateRandomKey() {
   return crypto.randomBytes(32).toString('base64');
 }
 
+// 检查并创建目录
+function ensureDirectoryExistence(filePath) {
+  const dirname = path.dirname(filePath);
+  fs.mkdirSync(dirname, { recursive: true });
+}
+
 // 读取或生成 JWT 密钥并保存到文件中
 function initializeJwtKeys(filePath) {
   let jwtSecretKey;
@@ -23,6 +29,8 @@ function initializeJwtKeys(filePath) {
     jwtSecretKey = generateRandomKey();
     adminSecretKey = generateRandomKey();
 
+    // 确保目录存在
+    ensureDirectoryExistence(filePath);
     // 将新生成的密钥保存到文件中
     fs.writeFileSync(filePath, JSON.stringify({ jwtSecretKey, adminSecretKey }), 'utf8');
   }
@@ -30,7 +38,8 @@ function initializeJwtKeys(filePath) {
   return { jwtSecretKey, adminSecretKey };
 }
 
-const jwtKeys = initializeJwtKeys(path.join(__dirname, 'jwtKeys.json'));
+const jwtKeys = initializeJwtKeys(path.join(__dirname, '../data/jwtKeys.json'));
+
 // 导出 JWT 密钥
 exports.jwtSecretKey = jwtKeys.jwtSecretKey;
 exports.adminSecretKey = jwtKeys.adminSecretKey;
